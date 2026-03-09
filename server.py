@@ -8,7 +8,7 @@ from mcp.server.fastmcp import FastMCP
 
 load_dotenv()
 
-mcp = FastMCP("sn-mcp", "1.0", description="A tool to query ServiceNow tables and metadata via the REST API.")
+mcp = FastMCP("sn-mcp")
 
 
 def _sn_credentials() -> tuple[str, str, str]:
