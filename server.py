@@ -1,6 +1,5 @@
 import json
 import os
-import sys
 import urllib.parse
 
 import httpx
@@ -89,6 +88,52 @@ async def get_table_schema(table: str, filter_keyword: str = "") -> str:
         fields_out[el] = entry
 
     return json.dumps({"table": table, "field_count": len(fields_out), "fields": fields_out})
+
+
+@mcp.tool()
+async def query_table(table: str, query: str = "", fields: str = "", limit: int = 50) -> str:
+    """Run a parameterized query against any ServiceNow table.
+
+    Args:
+        table: Table name (e.g. incident, sc_request, cmdb_ci_server)
+        query: Encoded query string (e.g. state=1^category=network)
+        fields: Comma-separated field names to return; empty returns all fields
+        limit: Max number of records (default 50, max 1000)
+    """
+    instance, username, password = _sn_credentials()
+    params = f"?sysparm_limit={min(limit, 1000)}&sysparm_display_value=true"
+    if query:
+        params += f"&sysparm_query={urllib.parse.quote(query)}"
+    if fields:
+        params += f"&sysparm_fields={urllib.parse.quote(fields)}"
+    url = f"{instance}/api/now/table/{table}{params}"
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url, auth=(username, password), headers={"Accept": "application/json"}, timeout=30.0)
+        response.raise_for_status()
+        data = response.json()
+    if "error" in data:
+        return f"API Error: {data['error']}"
+    results = data.get("result", [])
+    return json.dumps({"table": table, "count": len(results), "results": results})
+
+
+@mcp.tool()
+async def get_record(table: str, sys_id: str) -> str:
+    """Fetch a single record by sys_id from any ServiceNow table.
+
+    Args:
+        table: Table name (e.g. incident, change_request)
+        sys_id: The sys_id of the record
+    """
+    instance, username, password = _sn_credentials()
+    url = f"{instance}/api/now/table/{table}/{sys_id}?sysparm_display_value=true"
+    async with httpx.AsyncClient() as client:
+        response = await client.get(url, auth=(username, password), headers={"Accept": "application/json"}, timeout=30.0)
+        response.raise_for_status()
+        data = response.json()
+    if "error" in data:
+        return f"API Error: {data['error']}"
+    return json.dumps(data.get("result", {}))
 
 
 def main() -> None:
