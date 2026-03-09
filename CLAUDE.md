@@ -1,4 +1,4 @@
-# now-util
+# sn-mcp
 
 MCP server exposing ServiceNow REST API capabilities as tools for AI assistants.
 
@@ -12,7 +12,7 @@ MCP server exposing ServiceNow REST API capabilities as tools for AI assistants.
 
 - `server.py` — all MCP tools and server entrypoint; this is the only substantive file
 - `main.py` — unused stub, ignore
-- `pyproject.toml` — entry point: `now-util = "server:main"`
+- `pyproject.toml` — entry point: `sn-mcp = "server:main"`
 - `.env.example` — documents required env vars
 
 ## Development
@@ -31,11 +31,13 @@ uv run python server.py   # start MCP server over stdio
 ```
 
 For interactive testing via MCP Inspector:
+
 - Command: `uv`, Arguments: `run --directory <abs-path> python server.py`
 
 ### Verification
 
 Test the MCP handshake directly:
+
 ```bash
 python3 -c "
 import subprocess, json, select

@@ -1,5 +1,5 @@
 def main():
-    print("Hello from now-util!")
+    print("Hello from sn-mcp!")
 
 
 if __name__ == "__main__":

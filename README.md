@@ -1,4 +1,4 @@
-# now-util
+# sn-mcp
 
 MCP server that gives AI coding assistants read access to a ServiceNow instance — useful when building or debugging ServiceNow apps.
 
@@ -11,7 +11,7 @@ MCP server that gives AI coding assistants read access to a ServiceNow instance 
 
 ```bash
 git clone <this-repo>
-cd now-util
+cd sn-mcp
 cp .env.example .env
 ```
 
@@ -32,9 +32,9 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (Mac) o
 ```json
 {
   "mcpServers": {
-    "now-util": {
+    "sn-mcp": {
       "command": "uv",
-      "args": ["run", "--directory", "/absolute/path/to/now-util", "now-util"],
+      "args": ["run", "--directory", "/absolute/path/to/sn-mcp", "sn-mcp"],
       "env": {
         "SN_INSTANCE": "https://yourinstance.service-now.com",
         "SN_USERNAME": "your_username",
@@ -50,7 +50,7 @@ Add to `~/Library/Application Support/Claude/claude_desktop_config.json` (Mac) o
 ### Claude Code (CLI)
 
 ```bash
-claude mcp add now-util -- uv run --directory /absolute/path/to/now-util now-util
+claude mcp add sn-mcp -- uv run --directory /absolute/path/to/sn-mcp sn-mcp
 ```
 
 Then set credentials in `.env` or pass them via the `env` block in `.mcp.json`.

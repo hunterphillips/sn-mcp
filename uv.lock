@@ -317,7 +317,7 @@ wheels = [
 ]
 
 [[package]]
-name = "now-util"
+name = "util"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
